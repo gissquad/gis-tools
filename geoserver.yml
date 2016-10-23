@@ -1,16 +1,17 @@
 ---
 - hosts: qgis-server
+  become_user: root
   tasks:
   - name: Add Oracle Java Repository
-    sudo: true
+    become: yes
     apt_repository: repo='ppa:webupd8team/java'
 
   - name: Accept Java 8 License
-    sudo: true
+    become: yes
     debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
   - name: Install Oracle Java 8
-    sudo: true
+    become: yes
     apt: name={{item}} state=latest
     with_items:
       - oracle-java8-installer
@@ -19,7 +20,7 @@
 
   - name: Install Tomcat 8.
     apt: pkg=tomcat8 state=installed
-    sudo: true
+    become: yes
  
   - stat: path=/tmp/geoserver.war.zip
     register: geoserver_war_stat
@@ -30,20 +31,20 @@
       dest: /tmp/geoserver.war.zip
 
   - file: path=/var/lib/tomcat8/webapps/geoserver.war state=absent
-    sudo: true
+    become: yes
 
   - file: path=/var/lib/tomcat8/webapps/geoserver state=absent
-    sudo: true
+    become: yes
 
   - name: install geoserver
     unarchive: 
       src: /tmp/geoserver.war.zip
       dest: /var/lib/tomcat8/webapps/
       copy: no
-    sudo: true
+    become: yes
 
   - name: Restart tomcat
     service: 
       name: tomcat8
       state: restarted
-    sudo: true
+    become: yes
