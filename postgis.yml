@@ -1,0 +1,68 @@
+---
+- hosts: qgis-server
+  tasks:
+   - command: apt-get install unzip
+   
+   - name: Add postgres repository
+     apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ {{ansible_distribution_release}}-pgdg main' state=present
+ 
+   - name: Add postgres repository key
+     apt_key: url=http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc state=present
+ 
+   - name: Install postgresql
+     apt: pkg=postgresql-9.4 state=present force=yes
+ 
+   - name: postgresql conf 
+     lineinfile: dest=/etc/postgresql/9.4/main/postgresql.conf state=present regexp="^listen_addresses = \'*\'*" insertbefore="^port = 5432" line="listen_addresses = \'*\'"         # what IP address(es) to listen on;"
+ 
+   - name: pg_hba.conf
+     lineinfile: dest=/etc/postgresql/9.4/main/pg_hba.conf state=present regexp="host    all             all             0.0.0.0/0            md5" insertbefore="^# IPv6 local connections:" line="host    all             all             0.0.0.0/0            md5"
+   
+   - name: Start postgresql server
+     service: name=postgresql state=restarted enabled=yes
+
+   - name: Apache is up and running
+     apt: name=apache2 update_cache=yes state=latest
+ 
+   - name: Install Packages
+     apt: >
+       pkg={{item}}
+       state=installed
+       update-cache=yes
+     with_items:
+       - build-essential
+       - python-dev
+       - python-setuptools
+       - python-psycopg2
+       - postgresql-contrib-9.4
+       - postgresql-9.4-postgis-2.1
+       - libpq-dev
+       - qgis-mapserver
+       - libapache2-mod-fcgid
+       - libapache2-mod-wsgi
+       - python-psycopg2
+
+   - copy: src=qgis-site.conf dest=/etc/apache2/sites-available/qgis-site.conf
+
+   - name: enable qgis server
+     command: a2ensite qgis-site.conf
+
+   - name: Check if qgis-web-client is installed
+     stat: path=/var/www/html/qgis-web-client
+     register: qgs_client     
+ 
+   - name: add qgis web client apache conf
+     lineinfile: dest=/etc/apache2/sites-available/000-default.conf state=present regexp="^        ScriptAlias /web-viewer/ /var/www/html/qgis-web-client/site/" insertbefore="^</VirtualHost>" line="        ScriptAlias /web-viewer/ /var/www/html/qgis-web-client/site/"
+     when: qgs_client.stat.exists == False
+     
+   - name: download qgis web client
+     get_url: url=https://codeload.github.com/qgis/QGIS-Web-Client/zip/master dest=/tmp/qgis-web-client.zip mode=0644 
+     when: qgs_client.stat.exists == False
+
+   - unarchive: src=/tmp/qgis-web-client.zip dest=/var/www/html/ copy=no
+     when: qgs_client.stat.exists == False
+   
+   - command: mv /var/www/html/QGIS-Web-Client-master /var/www/html/qgis-web-client
+     when: qgs_client.stat.exists == False
+   
+   - service: name=apache2 state=restarted

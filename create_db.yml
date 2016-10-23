@@ -1,0 +1,49 @@
+---
+
+- hosts: qgis-server
+  sudo_user: postgres
+  gather_facts: yes
+
+  vars:
+    dbname: spatii_verzi
+    dbuser: postgres
+    password: fdr2016!
+    ansible_ssh_pipelining: true
+
+  tasks:
+  - name: ensure the database is present
+    postgresql_db: >
+      state=present
+      db={{ dbname }}
+      login_user={{ dbuser }}
+
+  - name: ensure the postgis extension is present
+    postgresql_ext: >
+      name=postgis
+      state=present
+      db={{ dbname }}
+      login_user={{ dbuser }}
+
+  - name: ensure the user has access to database
+    postgresql_user: >
+      name=spatii_verzi
+      password=fdr2016!
+      state=present
+      priv=CONNECT
+      db={{ dbname }}
+      login_user={{ dbuser }}
+
+  - name: ensure the user has necessary privileges
+    postgresql_user: >
+      name=spatii_verzi
+      role_attr_flags=LOGIN,CREATEDB
+      login_user={{ dbuser }}
+
+  - name: ensure the user has schema privileges
+    postgresql_privs: >
+      privs=ALL
+      type=schema
+      objs=public
+      role=spatii_verzi
+      db={{ dbname }}
+      login_user={{ dbuser }}
