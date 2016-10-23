@@ -27,7 +27,10 @@
       dest: /tmp/geoserver.war.zip
 
   - file: path=/var/lib/tomcat8/webapps/geoserver.war state=absent
+    sudo: true
+    
   - file: path=/var/lib/tomcat8/webapps/geoserver state=absent
+    sudo: true
 
   - name: install geoserver
     unarchive: 
