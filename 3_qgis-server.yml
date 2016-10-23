@@ -45,6 +45,8 @@
    - command: mv /var/www/html/QGIS-Web-Client-master /var/www/html/qgis-web-client
      when: qgs_client.stat.exists == False
 
+   - file: path=/var/www/html/qgis-web-client state=directory recurse=yes owner=www-data group=www-data
+
    - command:  find /var/www/html/qgis-web-client -type f -exec sed -i 's#/home/web/#/var/www/html/#g' {} +
 
    - service: name=apache2 state=restarted
