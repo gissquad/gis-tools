@@ -38,18 +38,3 @@
 
    - name: Start postgresql server
      service: name=postgresql state=restarted enabled=yes
-
-   - name: ensure template_postgis database exists
-     become_user: postgres
-     postgresql_db: name=template_postgis state=present
-     register: createdb_template_postgis
-
-   - name: make template_postgis a template
-     become_user: postgres
-     command: psql -d template_postgis -c "UPDATE pg_database SET datistemplate=true WHERE datname='template_postgis';"
-     when: createdb_template_postgis.changed
-
-   - name: enable postgis extension
-     become_user: postgres
-     command: psql -d template_postgis -c "CREATE EXTENSION postgis;"
-     when: createdb_template_postgis.changed

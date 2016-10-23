@@ -1,5 +1,4 @@
 ---
-
 - hosts: qgis-server
   sudo: true
   gather_facts: yes
