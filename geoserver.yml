@@ -7,11 +7,7 @@
   - command: apt-get update
     sudo: true
 
-  - command: apt-get install oracle-java8-installer
-    sudo: true
-
-  - name: Install oracle-java8-installer.
-    apt: pkg=oracle-java8-installer state=installed
+  - command: apt-get install -y oracle-java8-installer
     sudo: true
 
   - name: Install Tomcat 8.
@@ -28,7 +24,7 @@
 
   - file: path=/var/lib/tomcat8/webapps/geoserver.war state=absent
     sudo: true
-    
+
   - file: path=/var/lib/tomcat8/webapps/geoserver state=absent
     sudo: true
 
