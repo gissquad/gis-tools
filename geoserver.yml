@@ -1,12 +1,22 @@
 ---
 - hosts: qgis-server
   tasks:
-  - name: Install Tomcat 7. 
-    apt: "pkg={{ item }} state=installed"
+  - command: add-apt-repository ppa:webupd8team/java
     sudo: true
-    with_items: 
-      - tomcat7 
-      - tomcat7-admin
+
+  - command: apt-get update
+    sudo: true
+
+  - command: apt-get install oracle-java8-installer
+    sudo: true
+
+  - name: Install oracle-java8-installer.
+    apt: pkg=oracle-java8-installer state=installed
+    sudo: true
+
+  - name: Install Tomcat 8.
+    apt: pkg=tomcat8 state=installed
+    sudo: true
  
   - stat: path=/tmp/geoserver.war.zip
     register: geoserver_war_stat
@@ -16,15 +26,18 @@
       url: http://netix.dl.sourceforge.net/project/geoserver/GeoServer/2.9.2/geoserver-2.9.2-war.zip
       dest: /tmp/geoserver.war.zip
 
+  - file: path=/var/lib/tomcat8/webapps/geoserver.war state=absent
+  - file: path=/var/lib/tomcat8/webapps/geoserver state=absent
+
   - name: install geoserver
     unarchive: 
       src: /tmp/geoserver.war.zip
-      dest: /var/lib/tomcat7/webapps/ 
+      dest: /var/lib/tomcat8/webapps/
       copy: no
     sudo: true
 
   - name: Restart tomcat
     service: 
-      name: tomcat7 
+      name: tomcat8
       state: restarted
     sudo: true
