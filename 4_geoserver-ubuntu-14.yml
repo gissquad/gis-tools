@@ -6,25 +6,25 @@
     become: yes
     apt_repository: repo='ppa:webupd8team/java'
 
-  - name: Accept Java 8 License
+  - name: Accept Java 7 License
     become: yes
-    debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+    debconf: name='oracle-java7-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
 
-  - name: Install Oracle Java 8
+  - name: Install Oracle Java 7
     become: yes
     apt: name={{item}} state=latest
     with_items:
-      - oracle-java8-installer
+      - oracle-java7-installer
       - ca-certificates
       - oracle-java8-set-default
 
   - shell: echo JAVA_HOME is $JAVA_HOME
     environment:
-      JAVA_HOME: /usr/lib/jvm/java-8-oracle
+      JAVA_HOME: /usr/lib/jvm/java-7-oracle
     register: shellout
   - debug: var=shellout
 
-  - name: Install Tomcat 8.
+  - name: Install Tomcat 7.
     apt: pkg=tomcat7 state=installed
     become: yes
  
