@@ -31,16 +31,16 @@
   - stat: path=/tmp/geoserver.war.zip
     register: geoserver_war_stat
 
-  - name: download geoserver
-    get_url:
-      url: http://netix.dl.sourceforge.net/project/geoserver/GeoServer/2.8.5/geoserver-2.8.5-war.zip
-      dest: /tmp/geoserver.war.zip
-
   - file: path=/var/lib/tomcat7/webapps/geoserver.war state=absent
     become: yes
 
   - file: path=/var/lib/tomcat7/webapps/geoserver state=absent
     become: yes
+
+  - name: download geoserver
+    get_url:
+      url: http://netix.dl.sourceforge.net/project/geoserver/GeoServer/2.8.5/geoserver-2.8.5-war.zip
+      dest: /tmp/geoserver.war.zip
 
   - name: install geoserver
     unarchive: 
