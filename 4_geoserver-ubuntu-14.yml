@@ -33,7 +33,7 @@
 
   - name: download geoserver
     get_url:
-      url: http://netix.dl.sourceforge.net/project/geoserver/GeoServer/2.9.2/geoserver-2.9.2-war.zip
+      url: http://netix.dl.sourceforge.net/project/geoserver/GeoServer/2.8.5/geoserver-2.8.5-war.zip
       dest: /tmp/geoserver.war.zip
 
   - file: path=/var/lib/tomcat7/webapps/geoserver.war state=absent
