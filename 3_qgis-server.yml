@@ -1,13 +1,15 @@
 ---
 - hosts: qgis-server
-  became_user: root
-  become: yes
   tasks:
    - name: Install ZIP
      apt: pkg=unzip
+     became_user: root
+     become: yes
 
    - name: Apache is up and running
      apt: name=apache2 update_cache=yes state=latest
+     became_user: root
+     become: yes
 
    - name: Install Packages
      apt: >
@@ -21,32 +23,54 @@
        - python-psycopg2
        - php
        - php-pgsql
+     became_user: root
+     become: yes
 
    - copy: src=qgis-site.conf dest=/etc/apache2/sites-available/qgis-site.conf
+     became_user: root
+     become: yes
 
    - name: enable qgis server
      command: a2ensite qgis-site.conf
+     became_user: root
+     become: yes
 
    - name: Check if qgis-web-client is installed
      stat: path=/var/www/html/qgis-web-client
      register: qgs_client
+     became_user: root
+     become: yes
 
    - name: add qgis web client apache conf
      lineinfile: dest=/etc/apache2/sites-available/000-default.conf state=present regexp="^        ScriptAlias /web-viewer/ /var/www/html/qgis-web-client/site/" insertbefore="^</VirtualHost>" line="        ScriptAlias /web-viewer/ /var/www/html/qgis-web-client/site/"
      when: qgs_client.stat.exists == False
+     became_user: root
+     become: yes
 
    - name: download qgis web client
      get_url: url=https://codeload.github.com/qgis/QGIS-Web-Client/zip/master dest=/tmp/qgis-web-client.zip mode=0644
      when: qgs_client.stat.exists == False
+     became_user: root
+     become: yes
 
    - unarchive: src=/tmp/qgis-web-client.zip dest=/var/www/html/ copy=no
      when: qgs_client.stat.exists == False
+     became_user: root
+     become: yes
 
    - command: mv /var/www/html/QGIS-Web-Client-master /var/www/html/qgis-web-client
      when: qgs_client.stat.exists == False
+     became_user: root
+     become: yes
 
    - file: path=/var/www/html/qgis-web-client state=directory recurse=yes owner=www-data group=www-data
+     became_user: root
+     become: yes
 
    - command:  find /var/www/html/qgis-web-client -type f -exec sed -i 's#/home/web/#/var/www/html/#g' {} +
+     became_user: root
+     become: yes
 
    - service: name=apache2 state=restarted
+     became_user: root
+     become: yes
