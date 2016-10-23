@@ -1,13 +1,25 @@
 ---
 - hosts: qgis-server
   tasks:
-  - name: Add Java repo
-    apt_repository: repo='ppa:webupd8team/java' state=present update_cache=yes
-    sudo: true
+  - name: Install add-apt-repostory
+    become: yes
+    apt: name=software-properties-common state=latest
 
-  - name: Install oracle-java8-installer
-    apt: pkg=oracle-java8-installer state=installed
-    sudo: true
+  - name: Add Oracle Java Repository
+    become: yes
+    apt_repository: repo='ppa:webupd8team/java'
+
+  - name: Accept Java 8 License
+    become: yes
+    debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+  - name: Install Oracle Java 8
+    become: yes
+    apt: name={{item}} state=latest
+    with_items:
+      - oracle-java8-installer
+      - ca-certificates
+      - oracle-java8-set-default
 
   - name: Install Tomcat 8.
     apt: pkg=tomcat8 state=installed
