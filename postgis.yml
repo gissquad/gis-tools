@@ -53,25 +53,3 @@
      become_user: postgres
      command: psql -d template_postgis -c "CREATE EXTENSION postgis;"
      when: createdb_template_postgis.changed
-
-   - name: Create Database User
-     become_user: postgres
-     postgresql_user: >
-       user={{database.user}}
-       password={{database.password}}
-       role_attr_flags=CREATEDB,NOSUPERUSER
-     tags: database
-
-
-   - name: Create Geo Database.
-     become_user: postgres
-     postgresql_db: >
-       name={{database.geo_name}}
-       owner={{database.user}}
-       login_host=localhost
-       login_user={{database.user}}
-       login_password={{database.password}}
-       template=template_postgis
-     tags:
-       - database
-       - create
