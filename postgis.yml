@@ -11,6 +11,8 @@
    - name: Add postgres repository key
      apt_key: url=http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc state=present
 
+   - command: apt-get update
+
    - name: Install postgresql
      apt: pkg=postgresql-9.4 state=present force=yes
 
