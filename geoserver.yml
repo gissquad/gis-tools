@@ -2,8 +2,8 @@
 - hosts: qgis-server
   tasks:
   - name: Install Tomcat 7. 
-    apt: "pkg={{ item }} state=installed" 
-    sudo: true 
+    apt: "pkg={{ item }} state=installed"
+    sudo: true
     with_items: 
       - tomcat7 
       - tomcat7-admin
@@ -13,7 +13,7 @@
 
   - name: download geoserver
     get_url:
-      url: http://downloads.sourceforge.net/project/geoserver/GeoServer/2.9.1/geoserver-2.9.1-war.zip?r=http%3A%2F%2Fgeoserver.org%2Frelease%2Fstable%2F&ts=1473616263&use_mirror=vorboss
+      url: http://netix.dl.sourceforge.net/project/geoserver/GeoServer/2.9.2/geoserver-2.9.2-war.zip
       dest: /tmp/geoserver.war.zip
 
   - name: install geoserver
@@ -26,5 +26,5 @@
   - name: Restart tomcat
     service: 
       name: tomcat7 
-      state: restarted 
+      state: restarted
     sudo: true
