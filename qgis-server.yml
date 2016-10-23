@@ -1,6 +1,6 @@
 ---
 - hosts: qgis-server
-  become_method: su
+  sudo: true
   tasks:
    - name: Apache is up and running
      apt: name=apache2 update_cache=yes state=latest
