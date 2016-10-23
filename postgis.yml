@@ -1,5 +1,6 @@
 ---
 - hosts: qgis-server
+  sudo: true
   tasks:
    - name: Install ZIP
      apt: pkg=unzip
