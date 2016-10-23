@@ -1,0 +1,53 @@
+---
+- hosts: qgis-server
+  become_user: root
+  tasks:
+  - name: Add Oracle Java Repository
+    become: yes
+    apt_repository: repo='ppa:webupd8team/java'
+
+  - name: Accept Java 8 License
+    become: yes
+    debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+  - name: Install Oracle Java 8
+    become: yes
+    apt: name={{item}} state=latest
+    with_items:
+      - oracle-java8-installer
+      - ca-certificates
+      - oracle-java8-set-default
+
+  - name: Install Tomcat 8.
+    apt: pkg=tomcat7 state=installed
+    become: yes
+ 
+  - stat: path=/tmp/geoserver.war.zip
+    register: geoserver_war_stat
+
+  - name: download geoserver
+    get_url:
+      url: http://netix.dl.sourceforge.net/project/geoserver/GeoServer/2.9.2/geoserver-2.9.2-war.zip
+      dest: /tmp/geoserver.war.zip
+
+  - file: path=/var/lib/tomcat7/webapps/geoserver.war state=absent
+    become: yes
+
+  - file: path=/var/lib/tomcat7/webapps/geoserver state=absent
+    become: yes
+
+  - name: install geoserver
+    unarchive: 
+      src: /tmp/geoserver.war.zip
+      dest: /var/lib/tomcat7/webapps/
+      copy: no
+    become: yes
+
+  - file: path=/tmp/geoserver.war.zip state=absent
+    become: yes
+
+  - name: Restart tomcat
+    service: 
+      name: tomcat7
+      state: restarted
+    become: yes
