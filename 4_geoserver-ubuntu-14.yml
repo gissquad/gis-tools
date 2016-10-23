@@ -16,7 +16,7 @@
     with_items:
       - oracle-java7-installer
       - ca-certificates
-      - oracle-java8-set-default
+      - oracle-java7-set-default
 
   - shell: echo JAVA_HOME is $JAVA_HOME
     environment:
