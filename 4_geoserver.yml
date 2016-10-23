@@ -43,6 +43,9 @@
       copy: no
     become: yes
 
+  - file: path=/tmp/geoserver.war.zip state=absent
+    become: yes
+
   - name: Restart tomcat
     service: 
       name: tomcat8
