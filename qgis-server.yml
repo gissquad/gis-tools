@@ -2,8 +2,9 @@
 - hosts: qgis-server
   sudo: true
   tasks:
-   - command: apt-get install unzip
-   
+   - name: Install ZIP
+     apt: pkg=unzip
+
    - name: Apache is up and running
      apt: name=apache2 update_cache=yes state=latest
 
