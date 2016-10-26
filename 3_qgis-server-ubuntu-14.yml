@@ -1,12 +1,13 @@
 ---
 - hosts: qgis-server
-  sudo: true
   tasks:
    - name: Install ZIP
      apt: pkg=unzip
+     become: yes
 
    - name: Apache is up and running
      apt: name=apache2 update_cache=yes state=latest
+     become: yes
 
    - name: Install Packages
      apt: >
@@ -18,28 +19,45 @@
        - libapache2-mod-fcgid
        - libapache2-mod-wsgi
        - python-psycopg2
+       - php5
+       - php5-pgsql
+     become: yes
 
    - copy: src=qgis-site.conf dest=/etc/apache2/sites-available/qgis-site.conf
+     become: yes
 
    - name: enable qgis server
      command: a2ensite qgis-site.conf
+     become: yes
 
    - name: Check if qgis-web-client is installed
      stat: path=/var/www/html/qgis-web-client
      register: qgs_client
+     become: yes
 
    - name: add qgis web client apache conf
      lineinfile: dest=/etc/apache2/sites-available/000-default.conf state=present regexp="^        ScriptAlias /web-viewer/ /var/www/html/qgis-web-client/site/" insertbefore="^</VirtualHost>" line="        ScriptAlias /web-viewer/ /var/www/html/qgis-web-client/site/"
      when: qgs_client.stat.exists == False
+     become: yes
 
    - name: download qgis web client
      get_url: url=https://codeload.github.com/qgis/QGIS-Web-Client/zip/master dest=/tmp/qgis-web-client.zip mode=0644
      when: qgs_client.stat.exists == False
+     become: yes
 
    - unarchive: src=/tmp/qgis-web-client.zip dest=/var/www/html/ copy=no
      when: qgs_client.stat.exists == False
+     become: yes
 
    - command: mv /var/www/html/QGIS-Web-Client-master /var/www/html/qgis-web-client
      when: qgs_client.stat.exists == False
+     become: yes
+
+   - file: path=/var/www/html/qgis-web-client state=directory recurse=yes owner=www-data group=www-data
+     become: yes
+
+   - command:  find /var/www/html/qgis-web-client -type f -exec sed -i 's#/home/web/#/var/www/html/#g' {} +
+     become: yes
 
    - service: name=apache2 state=restarted
+     become: yes

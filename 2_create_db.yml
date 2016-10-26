@@ -1,7 +1,6 @@
 ---
-
 - hosts: qgis-server
-  sudo_user: postgres
+  sudo: true
   gather_facts: yes
 
   vars:
@@ -12,12 +11,14 @@
 
   tasks:
   - name: ensure the database is present
+    sudo_user: postgres
     postgresql_db: >
       state=present
       db={{ dbname }}
       login_user={{ dbuser }}
 
   - name: ensure the postgis extension is present
+    sudo_user: postgres
     postgresql_ext: >
       name=postgis
       state=present
@@ -25,6 +26,7 @@
       login_user={{ dbuser }}
 
   - name: ensure the user has access to database
+    sudo_user: postgres
     postgresql_user: >
       name=spatii_verzi
       password=fdr2016!
@@ -34,12 +36,14 @@
       login_user={{ dbuser }}
 
   - name: ensure the user has necessary privileges
+    sudo_user: postgres
     postgresql_user: >
       name=spatii_verzi
       role_attr_flags=LOGIN,CREATEDB
       login_user={{ dbuser }}
 
   - name: ensure the user has schema privileges
+    sudo_user: postgres
     postgresql_privs: >
       privs=ALL
       type=schema
