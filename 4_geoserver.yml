@@ -18,6 +18,9 @@
       - ca-certificates
       - oracle-java8-set-default
 
+  - stat: path=/var/lib/tomcat8/webapps/geoserver.war
+    register: gs_exists
+
   - copy: src=install_imageio_jai.sh dest=/tmp mode=0777
 
   - name: Install jai  and imageio
@@ -26,8 +29,9 @@
 
   - name: Install Tomcat 8.
     apt: pkg=tomcat8 state=installed
+    when: gs_exists.stat.exists == False
     become: yes
- 
+
   - stat: path=/tmp/geoserver.war.zip
     register: geoserver_war_stat
 
@@ -35,12 +39,7 @@
     get_url:
       url: http://heanet.dl.sourceforge.net/project/geoserver/GeoServer/2.9.2/geoserver-2.9.2-war.zip
       dest: /tmp/geoserver.war.zip
-
-  - file: path=/var/lib/tomcat8/webapps/geoserver.war state=absent
-    become: yes
-
-  - file: path=/var/lib/tomcat8/webapps/geoserver state=absent
-    become: yes
+    when: geoserver_war_stat.stat.exists == False
 
   - name: install geoserver
     unarchive: 
@@ -48,6 +47,7 @@
       dest: /var/lib/tomcat8/webapps/
       copy: no
     become: yes
+    when: gs_exists.stat.exists == False
 
   - file: path=/tmp/geoserver.war.zip state=absent
     become: yes
