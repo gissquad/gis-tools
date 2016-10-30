@@ -27,20 +27,21 @@
   - name: Install Tomcat 7.
     apt: pkg=tomcat7 state=installed
     become: yes
- 
-  - stat: path=/tmp/geoserver.war.zip
-    register: geoserver_war_stat
 
-  - file: path=/var/lib/tomcat7/webapps/geoserver.war state=absent
-    become: yes
+  - stat: path=/var/lib/tomcat7/webapps/geoserver.war
+    register: gs_exists
 
-  - file: path=/var/lib/tomcat7/webapps/geoserver state=absent
+  - copy: src=install_imageio_jai.sh dest=/tmp mode=0777
+
+  - name: Install jai  and imageio
+    command: /bin/bash /tmp/install_imageio_jai.sh
     become: yes
 
   - name: download geoserver
     get_url:
       url: http://netix.dl.sourceforge.net/project/geoserver/GeoServer/2.8.5/geoserver-2.8.5-war.zip
       dest: /tmp/geoserver.war.zip
+    when: gs_exists.stat.exists == False
 
   - name: install geoserver
     unarchive: 
@@ -48,6 +49,7 @@
       dest: /var/lib/tomcat7/webapps/
       copy: no
     become: yes
+    when: gs_exists.stat.exists == False
 
   - file: path=/tmp/geoserver.war.zip state=absent
     become: yes
