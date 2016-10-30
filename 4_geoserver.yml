@@ -23,7 +23,7 @@
     become: yes
 
   - name: Install jai
-    command: command: "{{ item }}" chdir=/tmp
+    command: "{{ item }}" chdir=/tmp
     whith_items:
       wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz
       gunzip -c jai-1_1_3-lib-linux-amd64.tar.gz | tar xf - && mv /tmp/jai-1_1_3/lib/*.jar /usr/lib/jvm/java-8-oracle/jre/lib/ext/
@@ -33,7 +33,7 @@
     become: yes
 
   - name: Install imageio
-    command: command: "{{ item }}" chdir=/tmp
+    command: "{{ item }}" chdir=/tmp
     whith_items:
       wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz
       gunzip -c jai_imageio-1_1-lib-linux-amd64.tar.gz | tar xf -
