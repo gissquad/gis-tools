@@ -41,7 +41,7 @@
     get_url:
       url: http://heanet.dl.sourceforge.net/project/geoserver/GeoServer/2.9.2/geoserver-2.9.2-war.zip
       dest: /tmp/geoserver.war.zip
-    when: geoserver_war_stat.stat.exists == False
+    when: gs_exists.stat.exists == False
 
   - name: install geoserver
     unarchive: 
