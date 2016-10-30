@@ -32,7 +32,7 @@
     when: gs_exists.stat.exists == False
     become: yes
 
-  - debug: gs_exists.stat.exists
+  - debug: var=gs_exists.stat.exists
 
   - stat: path=/tmp/geoserver.war.zip
     register: geoserver_war_stat
