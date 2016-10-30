@@ -20,7 +20,7 @@
 
   - name: Install jai
     command: "{{ item }}"
-    whith_items:
+    with_items:
       - wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz
       - gunzip -c jai-1_1_3-lib-linux-amd64.tar.gz | tar xf - && mv /tmp/jai-1_1_3/lib/*.jar /usr/lib/jvm/java-8-oracle/jre/lib/ext/
       - mv /tmp/jai-1_1_3/lib/*.so /usr/lib/jvm/java-8-oracle/jre/lib/amd64/
@@ -32,7 +32,7 @@
 
   - name: Install imageio
     command: "{{ item }}"
-    whith_items:
+    with_items:
       - wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz
       - gunzip -c jai_imageio-1_1-lib-linux-amd64.tar.gz | tar xf -
       - mv /tmp/jai_imageio-1_1/lib/*.jar /usr/lib/jvm/java-8-oracle/jre/lib/ext/
