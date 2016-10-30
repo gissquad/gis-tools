@@ -21,7 +21,7 @@
   - copy: src=install_imageio_jai.sh dest=/tmp mode=0777
 
   - name: Install jai  and imageio
-    command: /bin/bash install_imageio_jai.sh
+    command: /bin/bash /tmp/install_imageio_jai.sh
     become: yes
 
   - name: Install Tomcat 8.
