@@ -19,15 +19,11 @@
       - oracle-java8-set-default
 
   - name: Install jai
-    command: cd /tmp && wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz && gunzip -c jai-1_1_3-lib-linux-amd64.tar.gz | tar xf - && mv /tmp/jai-1_1_3/lib/*.jar $JAVA_HOME/jre/lib/ext/ && mv /tmp/jai-1_1_3/lib/*.so $JAVA_HOME/jre/lib/amd64/ && rm /tmp/jai-1_1_3-lib-linux-amd64.tar.gz && rm -r /tmp/jai-1_1_3
-    environment:
-      JAVA_HOME: /usr/lib/jvm/java-8-oracle
+    command: cd /tmp && wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz && gunzip -c jai-1_1_3-lib-linux-amd64.tar.gz | tar xf - && mv /tmp/jai-1_1_3/lib/*.jar /usr/lib/jvm/java-8-oracle/jre/lib/ext/ && mv /tmp/jai-1_1_3/lib/*.so /usr/lib/jvm/java-8-oracle/jre/lib/amd64/ && rm /tmp/jai-1_1_3-lib-linux-amd64.tar.gz && rm -r /tmp/jai-1_1_3
     become: yes
 
   - name: Install imageio
-    command: cd /tmp && wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz && gunzip -c jai_imageio-1_1-lib-linux-amd64.tar.gz | tar xf - && mv /tmp/jai_imageio-1_1/lib/*.jar $JAVA_HOME/jre/lib/ext/ && mv /tmp/jai_imageio-1_1/lib/*.so $JAVA_HOME/jre/lib/amd64/ && rm /tmp/jai_imageio-1_1-lib-linux-amd64.tar.gz && rm -r /tmp/jai_imageio-1_1
-    environment:
-      JAVA_HOME: /usr/lib/jvm/java-8-oracle
+    command: cd /tmp && wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz && gunzip -c jai_imageio-1_1-lib-linux-amd64.tar.gz | tar xf - && mv /tmp/jai_imageio-1_1/lib/*.jar /usr/lib/jvm/java-8-oracle/jre/lib/ext/ && mv /tmp/jai_imageio-1_1/lib/*.so /usr/lib/jvm/java-8-oracle/jre/lib/amd64/ && rm /tmp/jai_imageio-1_1-lib-linux-amd64.tar.gz && rm -r /tmp/jai_imageio-1_1
     become: yes
 
   - name: Install Tomcat 8.
