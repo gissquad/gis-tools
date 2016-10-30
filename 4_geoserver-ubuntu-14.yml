@@ -31,7 +31,7 @@
   - stat: path=/var/lib/tomcat7/webapps/geoserver.war
     register: gs_exists
 
-  - copy: src=install_imageio_jai.sh dest=/tmp mode=0777
+  - copy: src=install_imageio_jai-ubuntu-14.sh dest=/tmp mode=0777
 
   - name: Install jai  and imageio
     command: /bin/bash /tmp/install_imageio_jai-ubuntu-14.sh
