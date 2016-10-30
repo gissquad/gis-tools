@@ -34,7 +34,7 @@
   - copy: src=install_imageio_jai.sh dest=/tmp mode=0777
 
   - name: Install jai  and imageio
-    command: /bin/bash /tmp/install_imageio_jai.sh
+    command: /bin/bash /tmp/install_imageio_jai-ubuntu-14.sh
     become: yes
 
   - name: download geoserver
