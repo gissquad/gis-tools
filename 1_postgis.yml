@@ -29,9 +29,6 @@
        - postgresql-contrib-9.6
        - postgresql-9.6-postgis-2.3
        - libpq-dev
-    
-   - command: apt-get add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-   - command: apt-get update
 
    - name: postgresql conf
      lineinfile: dest=/etc/postgresql/9.6/main/postgresql.conf state=present regexp="^listen_addresses = \'*\'*" insertbefore="^port = 5432" line="listen_addresses = \'*\'"         # what IP address(es) to listen on;"
