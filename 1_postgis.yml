@@ -2,8 +2,7 @@
 - hosts: qgis-server
   sudo: true
   tasks:
-   - name: Bootstrap Python runtime
-   - raw: /usr/bin/apt-get update && /usr/bin/apt-get install -y python2.7 python-apt
+   - command:  /usr/bin/apt-get update && /usr/bin/apt-get install -y python2.7 python-apt
    
    - name: Install ZIP
      apt: pkg=unzip
