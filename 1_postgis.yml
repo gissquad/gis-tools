@@ -2,8 +2,6 @@
 - hosts: qgis-server
   sudo: true
   tasks:
-   - command:  /usr/bin/apt-get update && /usr/bin/apt-get install -y python2.7 python-apt
-   
    - name: Install ZIP
      apt: pkg=unzip
 
