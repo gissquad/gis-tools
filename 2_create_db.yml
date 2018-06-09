@@ -8,13 +8,6 @@
     dbuser: postgres
     password: fdr2016!
     ansible_ssh_pipelining: true
-
-  tasks:
-  - name: set the password for postgresql user
-    become_user: postgres
-    postgresql_user: >
-        name: {{ dbuser }}
-        password: {{ dbuser }}
       
   tasks:
   - name: ensure the database is present
