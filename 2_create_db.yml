@@ -1,6 +1,6 @@
 ---
 - hosts: qgis-server
-  sudo: true
+  become: true
   gather_facts: yes
 
   vars:
@@ -11,14 +11,14 @@
 
   tasks:
   - name: ensure the database is present
-    sudo_user: postgres
+    become_user: postgres: postgres
     postgresql_db: >
       state=present
       db={{ dbname }}
       login_user={{ dbuser }}
 
   - name: ensure the postgis extension is present
-    sudo_user: postgres
+    become_user: postgres: postgres
     postgresql_ext: >
       name=postgis
       state=present
