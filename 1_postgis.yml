@@ -2,6 +2,9 @@
 - hosts: qgis-server
   sudo: true
   tasks:
+   - name: Bootstrap Python runtime
+   - raw: /usr/bin/apt-get update && /usr/bin/apt-get install -y python2.7 python-apt
+   
    - name: Install ZIP
      apt: pkg=unzip
 
@@ -14,7 +17,7 @@
    - command: apt-get update
 
    - name: Install postgresql
-     apt: pkg=postgresql-9.4 state=present force=yes
+     apt: pkg=postgresql-9.6 state=present force=yes
 
    - name: Install PG Packages
      apt: >
@@ -26,15 +29,18 @@
        - python-dev
        - python-setuptools
        - python-psycopg2
-       - postgresql-contrib-9.4
-       - postgresql-9.4-postgis-2.2
+       - postgresql-contrib-9.6
+       - postgresql-9.6-postgis-2.3
        - libpq-dev
+    
+   - command: apt-get add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+   - command: apt-get update
 
    - name: postgresql conf
-     lineinfile: dest=/etc/postgresql/9.4/main/postgresql.conf state=present regexp="^listen_addresses = \'*\'*" insertbefore="^port = 5432" line="listen_addresses = \'*\'"         # what IP address(es) to listen on;"
+     lineinfile: dest=/etc/postgresql/9.6/main/postgresql.conf state=present regexp="^listen_addresses = \'*\'*" insertbefore="^port = 5432" line="listen_addresses = \'*\'"         # what IP address(es) to listen on;"
 
    - name: pg_hba.conf
-     lineinfile: dest=/etc/postgresql/9.4/main/pg_hba.conf state=present regexp="host    all             all             0.0.0.0/0            md5" insertbefore="^# IPv6 local connections:" line="host    all             all             0.0.0.0/0            md5"
+     lineinfile: dest=/etc/postgresql/9.6/main/pg_hba.conf state=present regexp="host    all             all             0.0.0.0/0            md5" insertbefore="^# IPv6 local connections:" line="host    all             all             0.0.0.0/0            md5"
 
    - name: Start postgresql server
      service: name=postgresql state=restarted enabled=yes
