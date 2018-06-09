@@ -11,7 +11,7 @@
 
   tasks:
   - name: ensure the database is present
-    become_user: postgres: postgres
+    become_user: postgres
     postgresql_db: >
       state=present
       db={{ dbname }}
