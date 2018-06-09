@@ -19,7 +19,7 @@
    - name: Install PG Packages
      apt: >
        pkg={{item}}
-       state=installed
+       state=present
        update-cache=yes
      with_items:
        - build-essential

@@ -28,7 +28,7 @@
     become: yes
 
   - name: Install Tomcat 8.
-    apt: pkg=tomcat8 state=installed
+    apt: pkg=tomcat8 state=present
     when: gs_exists.stat.exists == False
     become: yes
 
