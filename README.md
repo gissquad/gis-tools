@@ -1,5 +1,5 @@
 # gis-tools
-##Control machine:
+## Control machine:
 Install Ansible
 ```bash
 $ sudo apt-get update
@@ -14,12 +14,12 @@ Generate & copy the ssh keys on taret machine
 ssh-keygen
 ssh-copy-id -i ~/.ssh/id_rsa user@ip
 ```
-##Target Machine:
+## Target Machine:
 ```bash
 sudo apt-get update && /usr/bin/apt-get install -y python2.7 python-apt
 ```
 
-#Run playbooks
+# Run playbooks
 Ansible scripts for installation of geoserver, postgis and qgis server on a target machine
 ```bash
 ansible-playbook -i gis-servers x_xxxxx.yml  --ask-sudo-pass
